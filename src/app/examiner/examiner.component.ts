@@ -21,7 +21,6 @@ export class ExaminerComponent {
     this.responses = this.examService.getResponses();
   }
 
-  // Add exam
   addExam() {
     if (this.newExam.title && this.newExam.question) {
       this.examService.addExam(this.newExam);
@@ -32,13 +31,11 @@ export class ExaminerComponent {
     }
   }
 
-  // Delete exam
   deleteExam(exam: any) {
     this.examService.deleteExam(exam);
     this.refreshData();
   }
 
-  // Refresh exam and response data
   refreshData() {
     this.exams = this.examService.getExams();
     this.responses = this.examService.getResponses();

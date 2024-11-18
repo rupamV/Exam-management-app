@@ -4,7 +4,6 @@ import { UserService } from '../services/user.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
 
 @Component({
   standalone: true,
@@ -22,7 +21,6 @@ export class StudentComponent implements OnInit {
     private examService: ExamService,
     private userService: UserService,
     private router: Router,
-    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -44,18 +42,26 @@ export class StudentComponent implements OnInit {
   }
 
   submitAnswer(exam: any) {
-    const answer = this.studentAnswers[exam.title];
-    if (answer) {
-      const studentName = this.currentUser.name;
-      this.examService.recordResponse(studentName, exam.title, answer);
-      this.userService.markTestAsTaken();
+    const answer = this.studentAnswers[exam.title]; 
+    const studentName = this.currentUser.name; 
+  
+    if (!answer) {
+      alert('Please select an answer before submitting.');
+      return;
+    }
+  
+    const isSubmitted = this.examService.recordResponse(studentName, exam.title, answer);
+  
+    if (isSubmitted) {
+      this.userService.markTestAsTaken(); 
       alert(`Your answer "${answer}" for "${exam.title}" has been submitted.`);
     } else {
-      alert('Please select an answer before submitting.');
+      alert(`You have already submitted an answer for "${exam.title}".`);
     }
   }
+  
   logout() {
     localStorage.removeItem('currentUser');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/homepage']);
   }
 }

@@ -8,14 +8,14 @@ import { Router } from '@angular/router';
 export class AuthService {
   constructor(private auth: Auth, private router: Router) {}
 
-  // Login method
   login(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
       .then((res) => {
         localStorage.setItem('token', 'true');
-
+        localStorage.setItem('role', 'examiner');
+  
         if (res.user?.emailVerified) {
-          this.router.navigate(['homepage']);
+          this.router.navigate(['examiner']);
         } else {
           this.router.navigate(['/verify-email']);
         }
@@ -25,8 +25,7 @@ export class AuthService {
         this.router.navigate(['/login']);
       });
   }
-
-  // Register method
+  
   register(email: string, password: string) {
     createUserWithEmailAndPassword(this.auth, email, password)
       .then((res) => {
@@ -40,20 +39,19 @@ export class AuthService {
       });
   }
 
-  // Sign out
   logout() {
     signOut(this.auth)
       .then(() => {
         localStorage.removeItem('token');
-        this.router.navigate(['/login']);
+        localStorage.removeItem('role');
+        localStorage.removeItem('user');
+        this.router.navigate(['/homepage']);
       })
       .catch((err) => {
         alert(err.message);
       });
   }
 
-
-  // Email verification
   sendEmailForVerification(user: User | null) {
     if (user) {
       sendEmailVerification(user)

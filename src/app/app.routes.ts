@@ -37,18 +37,18 @@ export const routes: Routes = [
       import('./homepage/homepage.component').then((m) => m.HomepageComponent),
   },
   {
-    path: 'examiner',
-    loadComponent: () =>
-      import('./examiner/examiner.component').then((m) => m.ExaminerComponent),
-    canActivate: [AuthGuard],
-    data: { role: 'admin' },
-  },
-  {
     path: 'student',
     loadComponent: () =>
       import('./student/student.component').then((m) => m.StudentComponent),
-    canActivate: [AuthGuard],
-    data: { role: 'student' },
+      canActivate: [AuthGuard], 
+      data: { role: 'student' }, 
+  },
+  {
+    path: 'examiner',
+    loadComponent: () =>
+      import('./examiner/examiner.component').then((m) => m.ExaminerComponent),
+      canActivate: [AuthGuard], 
+      data: { role: 'examiner' }, 
   },
   {
     path: '**',
