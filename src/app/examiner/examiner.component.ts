@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ExamService } from '../services/exam.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   standalone: true,
@@ -15,7 +16,7 @@ export class ExaminerComponent {
   responses: any;
   newExam = { title: '', question: '', options: ['Yes', 'No'] };
 
-  constructor(private examService: ExamService) {
+  constructor(private examService: ExamService,private auth: AuthService) {
     this.exams = this.examService.getExams();
     this.responses = this.examService.getResponses();
   }
@@ -41,5 +42,8 @@ export class ExaminerComponent {
   refreshData() {
     this.exams = this.examService.getExams();
     this.responses = this.examService.getResponses();
+  }
+  logout() {
+    this.auth.logout();
   }
 }

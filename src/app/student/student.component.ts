@@ -4,6 +4,7 @@ import { UserService } from '../services/user.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   standalone: true,
@@ -20,7 +21,8 @@ export class StudentComponent implements OnInit {
   constructor(
     private examService: ExamService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -51,5 +53,9 @@ export class StudentComponent implements OnInit {
     } else {
       alert('Please select an answer before submitting.');
     }
+  }
+  logout() {
+    localStorage.removeItem('currentUser');
+    this.router.navigate(['/login']);
   }
 }

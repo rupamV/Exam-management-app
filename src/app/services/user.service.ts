@@ -7,7 +7,6 @@ export class UserService {
   private users = [
     { email: 'alice@example.com', password: 'password123', role: 'student', name: 'Alice' },
     { email: 'bob@example.com', password: 'password123', role: 'student', name: 'Bob' },
-    { email: 'examiner@example.com', password: 'password123', role: 'examiner', name: 'Examiner' },
   ];
 
   authenticateUser(email: string, password: string): Promise<any> {
