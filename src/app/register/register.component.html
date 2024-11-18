@@ -1,0 +1,31 @@
+<div>
+    <div>
+        <div></div>
+        <div>
+            <div>
+                <div>
+                    <form>
+                        <div>
+                            <h4>Register</h4>
+                        </div>
+                        <div>
+                          <label for="exampleInputEmail1">Email</label>
+                          <input type="email" name="email" [(ngModel)]="email">
+                        </div>
+                        <div>
+                          <label for="exampleInputPassword1">Password</label>
+                          <input type="password" name="password" [(ngModel)]="password">
+                        </div>
+                        <button type="button" (click)="register()">Register</button>
+                        <div>
+                            <div>
+                                <a [routerLink]='["/login"]' style="text-decoration: none;">Have an account ? <span>Login</span></a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div></div>
+    </div>
+</div>
