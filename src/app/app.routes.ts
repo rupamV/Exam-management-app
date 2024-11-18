@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './auth.guard';  // AuthGuard import
 
 export const routes: Routes = [
   {
@@ -10,6 +11,11 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () =>
       import('./auth/login/login.component').then((m) => m.LoginComponent),
+  },
+  {
+    path: 'loginstudent',
+    loadComponent: () =>
+      import('./loginstudent/loginstudent.component').then((m) => m.LoginstudentComponent),
   },
   {
     path: 'register',
@@ -28,17 +34,19 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./homepage/homepage.component').then((m) => m.HomepageComponent),
   },
-  // Examiner route
+  // Examiner route protected by AuthGuard
   {
     path: 'examiner',
     loadComponent: () =>
       import('./examiner/examiner.component').then((m) => m.ExaminerComponent),
+    canActivate: [AuthGuard], // Protect this route
   },
-  // Student route
+  // Student route protected by AuthGuard
   {
     path: 'student',
     loadComponent: () =>
       import('./student/student.component').then((m) => m.StudentComponent),
+    canActivate: [AuthGuard], // Protect this route
   },
   {
     path: '**',

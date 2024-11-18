@@ -1,26 +1,16 @@
-<h1>Student Panel</h1>
-
-<h2>Available Exams</h2>
-<form *ngFor="let exam of exams" (ngSubmit)="submitAnswer(exam)">
+<div *ngFor="let exam of exams">
   <h3>{{ exam.title }}</h3>
   <p>{{ exam.question }}</p>
-  <label>
-    <input
-      type="radio"
-      [value]="exam.options[0]"
-      name="{{ exam.title }}"
-      [(ngModel)]="studentAnswers[exam.title]"
-    />
-    {{ exam.options[0] }}
-  </label>
-  <label>
-    <input
-      type="radio"
-      [value]="exam.options[1]"
-      name="{{ exam.title }}"
-      [(ngModel)]="studentAnswers[exam.title]"
-    />
-    {{ exam.options[1] }}
-  </label>
-  <button type="submit">Submit</button>
-</form>
+  <div *ngFor="let option of exam.options">
+    <label>
+      <input
+        type="radio"
+        [name]="exam.title"
+        [(ngModel)]="studentAnswers[exam.title]"
+        [value]="option"
+      />
+      {{ option }}
+    </label>
+  </div>
+  <button (click)="submitAnswer(exam)">Submit</button>
+</div>

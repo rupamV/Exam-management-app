@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-homepage',
@@ -10,8 +10,16 @@ import { AuthService } from '../services/auth.service';
   styleUrl: './homepage.component.css'
 })
 export class HomepageComponent {
-  constructor(private fireauth: AuthService, private router: Router) { }
+  errorMessage: string = '';
+
+  constructor( private router: Router, private userService: UserService) { }
+ 
+    email = '';
+    password = '';
     login(){
         this.router.navigate(['login']);
+    }
+    loginStudent() {
+      this.router.navigate(['loginstudent']);
     }
 }

@@ -11,8 +11,8 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./examiner.component.css'],
 })
 export class ExaminerComponent {
-  exams: any[];
-  responses: any[];
+  exams: any;
+  responses: any;
   newExam = { title: '', question: '', options: ['Yes', 'No'] };
 
   constructor(private examService: ExamService) {
@@ -20,17 +20,26 @@ export class ExaminerComponent {
     this.responses = this.examService.getResponses();
   }
 
+  // Add exam
   addExam() {
     if (this.newExam.title && this.newExam.question) {
       this.examService.addExam(this.newExam);
       this.newExam = { title: '', question: '', options: ['Yes', 'No'] };
+      this.refreshData();
     } else {
       alert('Please fill in all fields.');
     }
   }
 
+  // Delete exam
   deleteExam(exam: any) {
     this.examService.deleteExam(exam);
-    this.exams = this.examService.getExams(); // Update the local list after deletion
+    this.refreshData();
+  }
+
+  // Refresh exam and response data
+  refreshData() {
+    this.exams = this.examService.getExams();
+    this.responses = this.examService.getResponses();
   }
 }

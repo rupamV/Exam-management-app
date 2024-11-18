@@ -5,17 +5,41 @@ import { Injectable } from '@angular/core';
 })
 export class UserService {
   private users = [
-    { name: 'Emma Examiner', email: 'emma@example.com', role: 'Examiner' },
-    { name: 'David Examiner', email: 'david@example.com', role: 'Examiner' },
-    { name: 'Alice Student', email: 'alice@example.com', role: 'Student' },
-    { name: 'Bob Student', email: 'bob@example.com', role: 'Student' },
+    { email: 'alice@example.com', password: 'password123', role: 'student', name: 'Alice' },
+    { email: 'bob@example.com', password: 'password123', role: 'student', name: 'Bob' },
+    { email: 'examiner@example.com', password: 'password123', role: 'examiner', name: 'Examiner' },
   ];
 
-  getUsers() {
-    return this.users;
+  authenticateUser(email: string, password: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const user = this.users.find((u) => u.email === email && u.password === password);
+      if (user) {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        resolve(user);
+      } else {
+        reject('Invalid email or password');
+      }
+    });
   }
 
-  getUserByEmail(email: string) {
-    return this.users.find((user) => user.email === email);
+  getCurrentUser() {
+    return JSON.parse(localStorage.getItem('currentUser') || '{}');
+  }
+
+  getCurrentUserRole() {
+    const currentUser = this.getCurrentUser();
+    return currentUser ? currentUser.role : null;
+  }
+
+  hasTakenTest() {
+    const currentUser = this.getCurrentUser();
+    return currentUser ? localStorage.getItem(currentUser.email + '_testTaken') === 'true' : false;
+  }
+
+  markTestAsTaken() {
+    const currentUser = this.getCurrentUser();
+    if (currentUser) {
+      localStorage.setItem(currentUser.email + '_testTaken', 'true');
+    }
   }
 }
