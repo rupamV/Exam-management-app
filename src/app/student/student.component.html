@@ -1,26 +1,26 @@
 <h1>Student Panel</h1>
 
 <h2>Available Exams</h2>
-<table border="1">
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Duration</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let exam of exams">
-      <td>{{ exam.title }}</td>
-      <td>{{ exam.duration }} mins</td>
-      <td>
-        <button (click)="takeExam(exam)">Take Exam</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<h2>Results</h2>
-<div *ngFor="let result of results">
-  <p>{{ result.examTitle }}: {{ result.score }}%</p>
-</div>
+<form *ngFor="let exam of exams" (ngSubmit)="submitAnswer(exam)">
+  <h3>{{ exam.title }}</h3>
+  <p>{{ exam.question }}</p>
+  <label>
+    <input
+      type="radio"
+      [value]="exam.options[0]"
+      name="{{ exam.title }}"
+      [(ngModel)]="studentAnswers[exam.title]"
+    />
+    {{ exam.options[0] }}
+  </label>
+  <label>
+    <input
+      type="radio"
+      [value]="exam.options[1]"
+      name="{{ exam.title }}"
+      [(ngModel)]="studentAnswers[exam.title]"
+    />
+    {{ exam.options[1] }}
+  </label>
+  <button type="submit">Submit</button>
+</form>

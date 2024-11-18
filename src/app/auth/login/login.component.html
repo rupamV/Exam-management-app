@@ -1,31 +1,31 @@
-<div>
-    <div>
-        <div></div>
-        <div>
-            <div>
-                <div>
-                    <form>
-                        <div>
+<div class="login-container">
+    <div class="login-box">
+        <div class="login-header"></div>
+        <div class="login-body">
+            <div class="login-form-container">
+                <div class="login-form-wrapper">
+                    <form class="login-form">
+                        <div class="login-title">
                             <h4>Login</h4>
                         </div>
-                        <div>
+                        <div class="form-group">
                           <label for="exampleInputEmail1">Email</label>
-                          <input type="email" name="email" [(ngModel)]="email">
+                          <input type="email" name="email" [(ngModel)]="email" class="form-control">
                         </div>
-                        <div>
+                        <div class="form-group">
                           <label for="exampleInputPassword1">Password</label>
-                          <input type="password" name="password" [(ngModel)]="password">
+                          <input type="password" name="password" [(ngModel)]="password" class="form-control">
                         </div>
-                        <button type="button" (click)="login()">Login</button>
-                        <div>
-                            <div>
-                                <a [routerLink]='["/register"]' style="text-decoration: none;">Need Account? <span>Register</span></a>
+                        <button type="button" (click)="login()" class="btn-login">Login</button>
+                        <div class="register-link-container">
+                            <div class="register-link-wrapper">
+                                <a [routerLink]='["/register"]' class="register-link">Need Account? <span>Register</span></a>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        <div></div>
+        <div class="login-footer"></div>
     </div>
 </div>

@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class UserService {
   private users = [
-    { name: 'John Admin', email: 'admin@example.com', role: 'Admin' },
     { name: 'Emma Examiner', email: 'emma@example.com', role: 'Examiner' },
     { name: 'David Examiner', email: 'david@example.com', role: 'Examiner' },
     { name: 'Alice Student', email: 'alice@example.com', role: 'Student' },
@@ -16,14 +15,7 @@ export class UserService {
     return this.users;
   }
 
-  updateUser(updatedUser: any) {
-    const index = this.users.findIndex((u) => u.email === updatedUser.email);
-    if (index !== -1) {
-      this.users[index] = updatedUser;
-    }
-  }
-
-  deleteUser(user: any) {
-    this.users = this.users.filter((u) => u.email !== user.email);
+  getUserByEmail(email: string) {
+    return this.users.find((user) => user.email === email);
   }
 }

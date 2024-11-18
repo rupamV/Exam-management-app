@@ -11,23 +11,26 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./examiner.component.css'],
 })
 export class ExaminerComponent {
-  exams: any;
-  selectedExam: any = null;
+  exams: any[];
+  responses: any[];
+  newExam = { title: '', question: '', options: ['Yes', 'No'] };
 
   constructor(private examService: ExamService) {
     this.exams = this.examService.getExams();
+    this.responses = this.examService.getResponses();
   }
 
-  editExam(exam: any) {
-    this.selectedExam = { ...exam };
-  }
-
-  updateExam() {
-    this.examService.updateExam(this.selectedExam);
-    this.selectedExam = null;
+  addExam() {
+    if (this.newExam.title && this.newExam.question) {
+      this.examService.addExam(this.newExam);
+      this.newExam = { title: '', question: '', options: ['Yes', 'No'] };
+    } else {
+      alert('Please fill in all fields.');
+    }
   }
 
   deleteExam(exam: any) {
     this.examService.deleteExam(exam);
+    this.exams = this.examService.getExams(); // Update the local list after deletion
   }
 }

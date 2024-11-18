@@ -6,39 +6,36 @@ import { Injectable } from '@angular/core';
 export class ExamService {
   private exams = [
     {
-      title: 'Angular Basics',
-      questions: ['What is a component in Angular?', 'Explain *ngIf and *ngFor.'],
-      duration: 30,
+      title: 'Are you a boy?',
+      question: 'Are you a boy?',
+      options: ['Yes', 'No'],
     },
     {
-      title: 'TypeScript Essentials',
-      questions: ['What are interfaces in TypeScript?', 'Calculate sum of an array.'],
-      duration: 40,
+      title: 'Are you a girl?',
+      question: 'Are you a girl?',
+      options: ['Yes', 'No'],
     },
   ];
 
-  private results: { examTitle: string; score: number }[] = [];
+  private responses: { studentName: string; examTitle: string; answer: string }[] = [];
 
   getExams() {
     return this.exams;
   }
 
-  updateExam(updatedExam: any) {
-    const index = this.exams.findIndex((e) => e.title === updatedExam.title);
-    if (index !== -1) {
-      this.exams[index] = updatedExam;
-    }
+  addExam(exam: { title: string; question: string; options: string[] }) {
+    this.exams.push(exam);
   }
 
   deleteExam(exam: any) {
     this.exams = this.exams.filter((e) => e.title !== exam.title);
   }
 
-  recordResult(examTitle: string, score: number) {
-    this.results.push({ examTitle, score });
+  recordResponse(studentName: string, examTitle: string, answer: string) {
+    this.responses.push({ studentName, examTitle, answer });
   }
 
-  getResults() {
-    return this.results;
+  getResponses() {
+    return this.responses;
   }
 }

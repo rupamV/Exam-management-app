@@ -5,31 +5,50 @@
   <thead>
     <tr>
       <th>Title</th>
-      <th>Duration</th>
+      <th>Question</th>
+      <th>Options</th>
       <th>Actions</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let exam of exams">
       <td>{{ exam.title }}</td>
-      <td>{{ exam.duration }} mins</td>
+      <td>{{ exam.question }}</td>
+      <td>{{ exam.options.join(' / ') }}</td>
       <td>
-        <button (click)="editExam(exam)">Edit</button>
         <button (click)="deleteExam(exam)">Delete</button>
       </td>
     </tr>
   </tbody>
 </table>
 
-<h3 *ngIf="selectedExam">Edit Exam</h3>
-<form *ngIf="selectedExam" (ngSubmit)="updateExam()">
+<h3>Add New Exam</h3>
+<form (ngSubmit)="addExam()">
   <label>
     Title:
-    <input type="text" [(ngModel)]="selectedExam.title" name="title" />
+    <input type="text" [(ngModel)]="newExam.title" name="title" required />
   </label>
   <label>
-    Duration:
-    <input type="number" [(ngModel)]="selectedExam.duration" name="duration" />
+    Question:
+    <input type="text" [(ngModel)]="newExam.question" name="question" required />
   </label>
-  <button type="submit">Save</button>
+  <button type="submit">Add Exam</button>
 </form>
+
+<h2>View Student Responses</h2>
+<table border="1" *ngIf="responses.length > 0">
+  <thead>
+    <tr>
+      <th>Student Name</th>
+      <th>Exam Title</th>
+      <th>Answer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let response of responses">
+      <td>{{ response.studentName }}</td>
+      <td>{{ response.examTitle }}</td>
+      <td>{{ response.answer }}</td>
+    </tr>
+  </tbody>
+</table>
