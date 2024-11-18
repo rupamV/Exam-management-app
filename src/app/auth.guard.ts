@@ -13,15 +13,12 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    // Get the current logged-in user
     const currentUser = this.userService.getCurrentUser();
 
     if (currentUser) {
-      // Allow access if the user is logged in
       return true;
     } else {
-      // If not logged in, redirect to login page
-      this.router.navigate(['/login']);
+      this.router.navigate(['/homepage']);
       return false;
     }
   }

@@ -1,4 +1,4 @@
-/* Overall container */
+
 .examiner-panel {
   max-width: 1000px;
   margin: 0 auto;
@@ -9,7 +9,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Panel title */
 .panel-title {
   font-size: 28px;
   color: #333;
@@ -17,7 +16,6 @@
   margin-bottom: 30px;
 }
 
-/* Section styling */
 section {
   margin-bottom: 30px;
 }
@@ -30,8 +28,6 @@ h3 {
   padding-bottom: 8px;
   margin-bottom: 15px;
 }
-
-/* Table styles */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -55,7 +51,6 @@ td {
   font-size: 14px;
 }
 
-/* Buttons */
 .delete-btn,
 .add-btn {
   background-color: #dc3545;
@@ -79,7 +74,6 @@ td {
   background-color: #218838;
 }
 
-/* Add exam form */
 .add-exam-form {
   display: flex;
   flex-direction: column;
