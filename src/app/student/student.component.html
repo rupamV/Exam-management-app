@@ -1,0 +1,26 @@
+<h1>Student Panel</h1>
+
+<h2>Available Exams</h2>
+<table border="1">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Duration</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let exam of exams">
+      <td>{{ exam.title }}</td>
+      <td>{{ exam.duration }} mins</td>
+      <td>
+        <button (click)="takeExam(exam)">Take Exam</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Results</h2>
+<div *ngFor="let result of results">
+  <p>{{ result.examTitle }}: {{ result.score }}%</p>
+</div>
