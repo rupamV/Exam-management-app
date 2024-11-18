@@ -1,51 +1,103 @@
-/* Shared Panel Styles */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+/* Container for the test */
+.test-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Welcome message */
+h2 {
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+}
+
+.user-name {
+  font-weight: bold;
+  color: #007BFF; /* Accent color */
+}
+
+.instructions {
+  font-size: 18px;
+  color: #555;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Individual exam card */
+.exam-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Exam title */
+.exam-title {
+  font-size: 20px;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+/* Exam question */
+.exam-question {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+/* Options group */
+.options-group {
+  margin-bottom: 20px;
+}
+
+.option-item {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+input[type="radio"] {
+  margin-right: 10px;
+}
+
+/* Submit button */
+.submit-btn {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .test-container {
+    padding: 15px;
   }
-  
-  table th,
-  table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
+
+  .exam-title {
+    font-size: 18px;
   }
-  
-  table th {
-    background-color: #3498db;
-    color: #fff;
+
+  .exam-question {
+    font-size: 14px;
   }
-  
-  table tr:nth-child(even) {
-    background-color: #f9f9f9;
+
+  .submit-btn {
+    font-size: 14px;
+    padding: 8px 16px;
   }
-  
-  button {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #2980b9;
-  }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
-  input,
-  select {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
+}

@@ -24,7 +24,6 @@ export class StudentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Get the current logged-in user
     this.currentUser = this.userService.getCurrentUser();
 
     if (!this.currentUser) {
@@ -32,32 +31,22 @@ export class StudentComponent implements OnInit {
       return;
     }
 
-    // Get the list of available exams from ExamService
     this.exams = this.examService.getExams();
-
-    // Check if the current user has already taken the test
     this.checkTestStatus();
   }
 
-  // Check if the user has already taken the test
   checkTestStatus() {
     if (this.userService.hasTakenTest()) {
       alert('You have already taken the test.');
     }
   }
 
-  // Submit an answer for an exam
   submitAnswer(exam: any) {
     const answer = this.studentAnswers[exam.title];
     if (answer) {
       const studentName = this.currentUser.name;
-
-      // Record the student's response
       this.examService.recordResponse(studentName, exam.title, answer);
-
-      // Mark the test as taken
       this.userService.markTestAsTaken();
-
       alert(`Your answer "${answer}" for "${exam.title}" has been submitted.`);
     } else {
       alert('Please select an answer before submitting.');

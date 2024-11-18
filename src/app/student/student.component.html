@@ -1,18 +1,22 @@
-<h2>Welcome {{ currentUser?.name }}!</h2>
-  <p>Take your test:</p>
-<div *ngFor="let exam of exams">
-  <h3>{{ exam.title }}</h3>
-  <p>{{ exam.question }}</p>
-  <div *ngFor="let option of exam.options">
-    <label>
-      <input
-        type="radio"
-        [name]="exam.title"
-        [(ngModel)]="studentAnswers[exam.title]"
-        [value]="option"
-      />
-      {{ option }}
-    </label>
+<div class="test-container">
+  <h2>Welcome, <span class="user-name">{{ currentUser?.name }}</span>!</h2>
+  <p class="instructions">Take your test:</p>
+  <div class="exam-card" *ngFor="let exam of exams">
+    <h3 class="exam-title">{{ exam.title }}</h3>
+    <p class="exam-question">{{ exam.question }}</p>
+    <div class="options-group">
+      <div *ngFor="let option of exam.options" class="option-item">
+        <label>
+          <input
+            type="radio"
+            [name]="exam.title"
+            [(ngModel)]="studentAnswers[exam.title]"
+            [value]="option"
+          />
+          {{ option }}
+        </label>
+      </div>
+    </div>
+    <button class="submit-btn" (click)="submitAnswer(exam)">Submit</button>
   </div>
-  <button (click)="submitAnswer(exam)">Submit</button>
 </div>

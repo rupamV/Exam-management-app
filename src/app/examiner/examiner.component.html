@@ -1,54 +1,75 @@
-<h1>Examiner Panel</h1>
+<div class="examiner-panel">
+  <h1 class="panel-title">Examiner Panel</h1>
 
-<h2>Manage Exams</h2>
-<table border="1">
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Question</th>
-      <th>Options</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let exam of exams">
-      <td>{{ exam.title }}</td>
-      <td>{{ exam.question }}</td>
-      <td>{{ exam.options.join(' / ') }}</td>
-      <td>
-        <button (click)="deleteExam(exam)">Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <section class="manage-exams">
+    <h2>Manage Exams</h2>
+    <table class="exam-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Question</th>
+          <th>Options</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let exam of exams">
+          <td>{{ exam.title }}</td>
+          <td>{{ exam.question }}</td>
+          <td>{{ exam.options.join(' / ') }}</td>
+          <td>
+            <button class="delete-btn" (click)="deleteExam(exam)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
-<h3>Add New Exam</h3>
-<form (ngSubmit)="addExam()">
-  <label>
-    Title:
-    <input type="text" [(ngModel)]="newExam.title" name="title" required />
-  </label>
-  <label>
-    Question:
-    <input type="text" [(ngModel)]="newExam.question" name="question" required />
-  </label>
-  <button type="submit">Add Exam</button>
-</form>
+  <section class="add-exam">
+    <h3>Add New Exam</h3>
+    <form (ngSubmit)="addExam()" class="add-exam-form">
+      <label>
+        Title:
+        <input
+          type="text"
+          [(ngModel)]="newExam.title"
+          name="title"
+          class="form-input"
+          required
+        />
+      </label>
+      <label>
+        Question:
+        <input
+          type="text"
+          [(ngModel)]="newExam.question"
+          name="question"
+          class="form-input"
+          required
+        />
+      </label>
+      <button type="submit" class="add-btn">Add Exam</button>
+    </form>
+  </section>
 
-<h2>View Student Responses</h2>
-<table border="1" *ngIf="responses.length > 0">
-  <thead>
-    <tr>
-      <th>Student Name</th>
-      <th>Exam Title</th>
-      <th>Answer</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let response of responses">
-      <td>{{ response.studentName }}</td>
-      <td>{{ response.examTitle }}</td>
-      <td>{{ response.answer }}</td>
-    </tr>
-  </tbody>
-</table>
+  <section class="student-responses">
+    <h2>View Student Responses</h2>
+    <table class="responses-table" *ngIf="responses.length > 0">
+      <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>Exam Title</th>
+          <th>Answer</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let response of responses">
+          <td>{{ response.studentName }}</td>
+          <td>{{ response.examTitle }}</td>
+          <td>{{ response.answer }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <p *ngIf="responses.length === 0">No responses available.</p>
+  </section>
+</div>
