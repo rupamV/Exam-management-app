@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './auth.guard';  // AuthGuard import
+import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'homepage',
     pathMatch: 'full',
   },
   {
@@ -33,23 +33,22 @@ export const routes: Routes = [
     path: 'homepage',
     loadComponent: () =>
       import('./homepage/homepage.component').then((m) => m.HomepageComponent),
+    canActivate: [AuthGuard],
   },
-  // Examiner route protected by AuthGuard
   {
     path: 'examiner',
     loadComponent: () =>
       import('./examiner/examiner.component').then((m) => m.ExaminerComponent),
-    canActivate: [AuthGuard], // Protect this route
+    canActivate: [AuthGuard],
   },
-  // Student route protected by AuthGuard
   {
     path: 'student',
     loadComponent: () =>
       import('./student/student.component').then((m) => m.StudentComponent),
-    canActivate: [AuthGuard], // Protect this route
+    
   },
   {
     path: '**',
-    redirectTo: 'login', // Redirect any unknown route to login
+    redirectTo: 'login',
   },
 ];

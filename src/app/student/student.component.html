@@ -1,3 +1,5 @@
+<h2>Welcome {{ currentUser?.name }}!</h2>
+  <p>Take your test:</p>
 <div *ngFor="let exam of exams">
   <h3>{{ exam.title }}</h3>
   <p>{{ exam.question }}</p>
