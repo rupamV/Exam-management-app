@@ -20,6 +20,6 @@ export class HomepageComponent {
         this.router.navigate(['login']);
     }
     loginStudent() {
-      this.router.navigate(['loginstudent']);
+      this.router.navigate(['login']);
     }
 }

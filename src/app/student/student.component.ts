@@ -4,6 +4,7 @@ import { UserService } from '../services/user.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   standalone: true,
@@ -21,47 +22,48 @@ export class StudentComponent implements OnInit {
     private examService: ExamService,
     private userService: UserService,
     private router: Router,
+    private auth: AuthService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    // Get the current user from local storage or user service
     this.currentUser = this.userService.getCurrentUser();
 
-    if (!this.currentUser) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
-    this.exams = this.examService.getExams();
-    this.checkTestStatus();
+    // Fetch exams if user is a student
+    this.refreshData();
   }
 
-  checkTestStatus() {
-    if (this.userService.hasTakenTest()) {
+  async checkTestStatus() {
+    const hasTaken = await this.userService.hasTakenTest();
+    if (hasTaken) {
       alert('You have already taken the test.');
     }
   }
 
-  submitAnswer(exam: any) {
-    const answer = this.studentAnswers[exam.title]; 
-    const studentName = this.currentUser.name; 
-  
+  async submitAnswer(exam: any) {
+    const answer = this.studentAnswers[exam.title];
+
     if (!answer) {
       alert('Please select an answer before submitting.');
       return;
     }
-  
-    const isSubmitted = this.examService.recordResponse(studentName, exam.title, answer);
-  
+
+    const isSubmitted = await this.examService.recordResponse(exam.title, answer);
+
     if (isSubmitted) {
-      this.userService.markTestAsTaken(); 
+      await this.userService.markTestAsTaken();
       alert(`Your answer "${answer}" for "${exam.title}" has been submitted.`);
     } else {
       alert(`You have already submitted an answer for "${exam.title}".`);
     }
   }
-  
+
+  async refreshData() {
+    this.exams = await this.examService.getExams();
+    this.checkTestStatus();
+  }
+
   logout() {
-    localStorage.removeItem('currentUser');
-    this.router.navigate(['/homepage']);
+    this.auth.logout();
   }
 }

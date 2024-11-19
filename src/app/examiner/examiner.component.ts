@@ -6,7 +6,7 @@ import { AuthService } from '../services/auth.service';
 
 @Component({
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   selector: 'app-examiner',
   templateUrl: './examiner.component.html',
   styleUrls: ['./examiner.component.css'],
@@ -16,14 +16,13 @@ export class ExaminerComponent {
   responses: any;
   newExam = { title: '', question: '', options: ['Yes', 'No'] };
 
-  constructor(private examService: ExamService,private auth: AuthService) {
-    this.exams = this.examService.getExams();
-    this.responses = this.examService.getResponses();
+  constructor(private examService: ExamService, private auth: AuthService) {
+    this.refreshData();
   }
 
-  addExam() {
+  async addExam() {
     if (this.newExam.title && this.newExam.question) {
-      this.examService.addExam(this.newExam);
+      await this.examService.addExam(this.newExam);
       this.newExam = { title: '', question: '', options: ['Yes', 'No'] };
       this.refreshData();
     } else {
@@ -31,15 +30,17 @@ export class ExaminerComponent {
     }
   }
 
-  deleteExam(exam: any) {
-    this.examService.deleteExam(exam);
+  async deleteExam(exam: any) {
+    await this.examService.deleteExam(exam);
     this.refreshData();
   }
 
-  refreshData() {
-    this.exams = this.examService.getExams();
-    this.responses = this.examService.getResponses();
+  async refreshData() {
+    debugger
+    this.exams = await this.examService.getExams();
+    this.responses = await this.examService.getResponses();
   }
+
   logout() {
     this.auth.logout();
   }

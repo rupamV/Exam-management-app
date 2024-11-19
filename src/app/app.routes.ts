@@ -13,13 +13,6 @@ export const routes: Routes = [
       import('./auth/login/login.component').then((m) => m.LoginComponent),
   },
   {
-    path: 'loginstudent',
-    loadComponent: () =>
-      import('./loginstudent/loginstudent.component').then(
-        (m) => m.LoginstudentComponent
-      ),
-  },
-  {
     path: 'register',
     loadComponent: () =>
       import('./register/register.component').then((m) => m.RegisterComponent),
@@ -40,15 +33,15 @@ export const routes: Routes = [
     path: 'student',
     loadComponent: () =>
       import('./student/student.component').then((m) => m.StudentComponent),
-      canActivate: [AuthGuard], 
-      data: { role: 'student' }, 
+    canActivate: [AuthGuard],
+    data: { role: 'student' },
   },
   {
     path: 'examiner',
     loadComponent: () =>
       import('./examiner/examiner.component').then((m) => m.ExaminerComponent),
-      canActivate: [AuthGuard], 
-      data: { role: 'examiner' }, 
+    canActivate: [AuthGuard],
+    data: { role: 'examiner' },
   },
   {
     path: '**',

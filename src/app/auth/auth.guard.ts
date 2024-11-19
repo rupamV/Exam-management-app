@@ -6,43 +6,42 @@ import {
   Router,
 } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
+import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private router: Router, private auth: Auth) {}
+  constructor(private router: Router, private auth: Auth, private firestore: Firestore) {}
 
-  canActivate(
+  async canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): boolean {
-    const user = this.getUser();
-    const firebaseToken = localStorage.getItem('token');
+  ): Promise<boolean> {
+    const user = this.auth.currentUser;
 
-    if (!user && !firebaseToken) {
+    if (!user) {
       this.router.navigate(['/login']);
       return false;
     }
 
+    const usersCollection = collection(this.firestore, 'users');
+    const userQuery = query(usersCollection, where('uid', '==', user.uid));
+    const snapshot = await getDocs(userQuery);
+
+    if (snapshot.empty) {
+      this.router.navigate(['/login']);
+      return false;
+    }
+
+    const userData: any = snapshot.docs[0].data();
     const requiredRole = route.data['role'];
 
-    if (requiredRole) {
-      if (requiredRole === 'student' && user?.role !== 'student') {
-        this.router.navigate(['/loginstudent']);
-        return false;
-      }
-
-      if (requiredRole === 'examiner' && !firebaseToken) {
-        this.router.navigate(['/login']);
-        return false;
-      }
+    if (requiredRole && userData.role !== requiredRole) {
+      this.router.navigate(['/homepage']);
+      return false;
     }
 
     return true;
-  }
-
-  private getUser() {
-    return JSON.parse(localStorage.getItem('user') || 'null');
   }
 }
