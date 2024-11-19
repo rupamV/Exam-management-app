@@ -3,6 +3,7 @@ import { AuthService } from '../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { emailRegex,passwordRegex } from '../validation';
 
 @Component({
   selector: 'app-register',
@@ -19,13 +20,14 @@ export class RegisterComponent implements OnInit{
 
   ngOnInit(): void {
   }
-  register(){
-    if(this.email ==''){
-      alert('Please enter email');
+  register() {
+   
+    if (this.password == '') {
+      alert('Please enter password');
       return;
     }
-    if(this.password ==''){
-      alert('Please enter password');
+    if (!passwordRegex.test(this.password)) {
+      alert('Please enter a valid password');
       return;
     }
     this.fireauth.register(this.email, this.password);

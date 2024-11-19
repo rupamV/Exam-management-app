@@ -3,7 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-
+import { emailRegex,passwordRegex } from '../../validation';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -22,13 +22,13 @@ export class LoginComponent implements OnInit {
     }
     
     login(){
-      if(this.email ==''){
-        alert('Please enter email');
-        return;
+      if (!emailRegex.test(this.email)) {
+      alert('Please enter a valid email');
+      return;
       }
-      if(this.password ==''){
-        alert('Please enter password');
-        return;
+      if (!passwordRegex.test(this.password)) {
+      alert('Please enter a valid password');
+      return;
       }
       this.fireauth.login(this.email, this.password);
       this.email = this.password = '';
