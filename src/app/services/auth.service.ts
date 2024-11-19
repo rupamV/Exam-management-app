@@ -31,7 +31,7 @@ export class AuthService {
   async login(email: string, password: string): Promise<User> {
     try {
       const res: UserCredential = await signInWithEmailAndPassword(this.auth, email, password); // Explicitly typed as UserCredential
-      return res.user; // Return the User object
+      return res.user;
     } catch (error: any) {
       throw new Error(`Login failed: ${error.message}`);
     }
