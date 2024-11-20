@@ -8,14 +8,7 @@ import {
   signOut,
   UserCredential,
 } from '@angular/fire/auth';
-import {
-  Firestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-} from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, getDocs, query, where } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -25,7 +18,7 @@ export class AuthService {
   constructor(
     private auth: Auth,
     private firestore: Firestore,
-    private router: Router
+    private router: Router,
   ) {}
 
   async login(email: string, password: string): Promise<User> {

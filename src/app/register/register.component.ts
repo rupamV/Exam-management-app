@@ -11,14 +11,18 @@ import { emailRegex, passwordRegex } from '../validation';
   standalone: true,
   imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent implements OnInit {
-  email: string = '';
-  password: string = '';
-  role: string = ''; 
+  email = '';
+  password = '';
+  role = '';
 
-  constructor(private fireauth: AuthService, private firestore: Firestore, private router: Router) {}
+  constructor(
+    private fireauth: AuthService,
+    private firestore: Firestore,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {}
 
@@ -31,7 +35,7 @@ export class RegisterComponent implements OnInit {
       alert('Please select a valid role: examiner or student.');
       return;
     }
-  
+
     if (!emailRegex.test(this.email)) {
       alert('Please enter a valid email');
       return;

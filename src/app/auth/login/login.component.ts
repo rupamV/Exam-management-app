@@ -11,13 +11,17 @@ import { emailRegex, passwordRegex } from '../../validation';
   standalone: true,
   imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  email: string = '';
-  password: string = '';
+  email = '';
+  password = '';
 
-  constructor(private fireauth: AuthService, private firestore: Firestore, private router: Router) {}
+  constructor(
+    private fireauth: AuthService,
+    private firestore: Firestore,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {}
 
@@ -30,16 +34,16 @@ export class LoginComponent implements OnInit {
       alert('Please enter a valid password');
       return;
     }
-  
+
     try {
       const loggedInUser = await this.fireauth.login(this.email, this.password);
-  
+
       // Ensure `loggedInUser` is typed as `User` and handle logic properly
       if (loggedInUser?.uid) {
         const usersCollection = collection(this.firestore, 'users');
         const userQuery = query(usersCollection, where('uid', '==', loggedInUser.uid));
         const snapshot = await getDocs(userQuery);
-  
+
         if (!snapshot.empty) {
           const userData: any = snapshot.docs[0].data();
           if (userData['role'] === 'examiner') {
@@ -59,5 +63,4 @@ export class LoginComponent implements OnInit {
       alert(`Login failed: ${(error as Error).message}`);
     }
   }
-  
 }

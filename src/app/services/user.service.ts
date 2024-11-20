@@ -1,5 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Firestore, doc, setDoc, getDoc, collection, query, where, getDocs } from '@angular/fire/firestore';
+import {
+  Firestore,
+  doc,
+  setDoc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +19,11 @@ export class UserService {
   // Authenticate user by email and password
   async authenticateUser(email: string, password: string): Promise<any> {
     const usersCollection = collection(this.firestore, 'users');
-    const q = query(usersCollection, where('email', '==', email), where('password', '==', password)); // This could be modified for security if needed
+    const q = query(
+      usersCollection,
+      where('email', '==', email),
+      where('password', '==', password),
+    ); // This could be modified for security if needed
     const querySnapshot = await getDocs(q);
 
     if (!querySnapshot.empty) {

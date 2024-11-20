@@ -15,14 +15,14 @@ import { AuthService } from '../services/auth.service';
 })
 export class StudentComponent implements OnInit {
   exams: any[] = [];
-  studentAnswers: { [examTitle: string]: string } = {};
+  studentAnswers: Record<string, string> = {};
   currentUser: any;
 
   constructor(
     private examService: ExamService,
     private userService: UserService,
     private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
   ) {}
 
   async ngOnInit(): Promise<void> {

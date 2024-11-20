@@ -16,7 +16,10 @@ export class ExaminerComponent {
   responses: any;
   newExam = { title: '', question: '', options: ['Yes', 'No'] };
 
-  constructor(private examService: ExamService, private auth: AuthService) {
+  constructor(
+    private examService: ExamService,
+    private auth: AuthService,
+  ) {
     this.refreshData();
   }
 
@@ -36,7 +39,7 @@ export class ExaminerComponent {
   }
 
   async refreshData() {
-    debugger
+    debugger;
     this.exams = await this.examService.getExams();
     this.responses = await this.examService.getResponses();
   }

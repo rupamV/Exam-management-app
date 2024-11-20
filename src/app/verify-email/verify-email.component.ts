@@ -5,13 +5,10 @@ import { Component, OnInit } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './verify-email.component.html',
-  styleUrl: './verify-email.component.css'
+  styleUrl: './verify-email.component.css',
 })
 export class VerifyEmailComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }
