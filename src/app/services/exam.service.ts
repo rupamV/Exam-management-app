@@ -1,90 +1,87 @@
 import { Injectable } from '@angular/core';
+import {
+  Firestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  query,
+  where,
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExamService {
-  private examsKey = 'exams';
-  private responsesKey = 'responses';
+  constructor(private firestore: Firestore) {}
 
-  constructor() {
-    // Initialize localStorage for exams and responses if not present
-    if (!localStorage.getItem(this.examsKey)) {
-      localStorage.setItem(this.examsKey, JSON.stringify([]));
-    }
-    if (!localStorage.getItem(this.responsesKey)) {
-      localStorage.setItem(this.responsesKey, JSON.stringify([]));
-    }
+  // Get all exams from Firestore
+  async getExams() {
+    const examsCollection = collection(this.firestore, 'exams');
+    const querySnapshot = await getDocs(examsCollection);
+    return querySnapshot.docs.map((doc) => doc.data());
   }
 
-  // Get all exams stored in localStorage
-  getExams() {
-    return JSON.parse(localStorage.getItem(this.examsKey) || '[]');
+  // Get all responses from Firestore
+  async getResponses() {
+    const responsesCollection = collection(this.firestore, 'responses');
+    const querySnapshot = await getDocs(responsesCollection);
+    return querySnapshot.docs.map((doc) => doc.data());
   }
 
-  // Get all responses stored in localStorage
-  getResponses() {
-    return JSON.parse(localStorage.getItem(this.responsesKey) || '[]');
-  }
-
-  // Add a new exam to localStorage
-  addExam(exam: { title: string; question: string; options: string[] }) {
-    const exams = this.getExams();
-    exams.push(exam);
-    localStorage.setItem(this.examsKey, JSON.stringify(exams));
+  // Add a new exam to Firestore
+  async addExam(exam: { title: string; question: string; options: string[] }) {
+    const examsCollection = collection(this.firestore, 'exams');
+    await addDoc(examsCollection, exam);
   }
 
   // Delete an exam by its title
-  deleteExam(exam: { title: string }) {
-    const exams = this.getExams();
-    const updatedExams = exams.filter(
-      (e: { title: string }) => e.title !== exam.title
-    );
-    localStorage.setItem(this.examsKey, JSON.stringify(updatedExams));
+  async deleteExam(exam: { title: string }) {
+    const examsCollection = collection(this.firestore, 'exams');
+    const q = query(examsCollection, where('title', '==', exam.title));
+    const querySnapshot = await getDocs(q);
+
+    for (const examDoc of querySnapshot.docs) {
+      const examRef = doc(this.firestore, 'exams', examDoc.id);
+      await deleteDoc(examRef);
+    }
   }
 
   // Record a student's response for an exam
-  recordResponse(studentName: string, examTitle: string, answer: string): boolean {
-    const responses = this.getResponses();
-    const alreadySubmitted = this.hasSubmittedResponse(studentName, examTitle);
+  async recordResponse(examTitle: string, answer: string): Promise<boolean> {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const email = currentUser?.email; // Use email as unique identifier
 
-    if (alreadySubmitted) {
-      // Don't allow submission if already submitted
-      return false;
+    if (!email) {
+      throw new Error('No user is logged in.');
     }
 
-    // Add the response to storage if not already submitted
-    responses.push({ studentName, examTitle, answer });
-    localStorage.setItem(this.responsesKey, JSON.stringify(responses));
+    const alreadySubmitted = await this.hasSubmittedResponse(email, examTitle);
+    if (alreadySubmitted) return false;
+
+    const responsesCollection = collection(this.firestore, 'responses');
+    await addDoc(responsesCollection, { studentEmail: email, examTitle, answer });
     return true;
   }
 
   // Check if a student has already submitted an answer for a specific exam
-  private hasSubmittedResponse(
-    studentName: string,
-    examTitle: string
-  ): boolean {
-    const responses = this.getResponses();
-    return responses.some(
-      (response: { studentName: string; examTitle: string }) =>
-        response.studentName === studentName && response.examTitle === examTitle
+  async hasSubmittedResponse(studentEmail: string, examTitle: string): Promise<boolean> {
+    const responsesCollection = collection(this.firestore, 'responses');
+    const q = query(
+      responsesCollection,
+      where('studentEmail', '==', studentEmail),
+      where('examTitle', '==', examTitle),
     );
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
   }
 
-  // Check if a student has already taken any test
-  hasTakenTest(studentName: string): boolean {
-    const responses = this.getResponses();
-    return responses.some(
-      (response: { studentName: string }) =>
-        response.studentName === studentName
-    );
-  }
-
-  // Get responses for a particular exam
-  getExamResponses(examTitle: string) {
-    const responses = this.getResponses();
-    return responses.filter(
-      (response: { examTitle: string }) => response.examTitle === examTitle
-    );
+  // Get all responses for a particular exam
+  async getExamResponses(examTitle: string) {
+    const responsesCollection = collection(this.firestore, 'responses');
+    const q = query(responsesCollection, where('examTitle', '==', examTitle));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map((doc) => doc.data());
   }
 }

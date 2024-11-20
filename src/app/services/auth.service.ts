@@ -1,66 +1,68 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signOut, User } from '@angular/fire/auth';
+import {
+  Auth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+  User,
+  signOut,
+  UserCredential,
+} from '@angular/fire/auth';
+import { Firestore, collection, addDoc, getDocs, query, where } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private auth: Auth, private router: Router) {}
+  constructor(
+    private auth: Auth,
+    private firestore: Firestore,
+    private router: Router,
+  ) {}
 
-  login(email: string, password: string) {
-    signInWithEmailAndPassword(this.auth, email, password)
-      .then((res) => {
-        localStorage.setItem('token', 'true');
-        localStorage.setItem('role', 'examiner');
-  
-        if (res.user?.emailVerified) {
-          this.router.navigate(['examiner']);
-        } else {
-          this.router.navigate(['/verify-email']);
-        }
-      })
-      .catch((err) => {
-        alert(err.message);
-        this.router.navigate(['/login']);
-      });
+  async login(email: string, password: string): Promise<User> {
+    try {
+      const res: UserCredential = await signInWithEmailAndPassword(this.auth, email, password); // Explicitly typed as UserCredential
+      return res.user;
+    } catch (error: any) {
+      throw new Error(`Login failed: ${error.message}`);
+    }
   }
-  
-  register(email: string, password: string) {
-    createUserWithEmailAndPassword(this.auth, email, password)
-      .then((res) => {
-        alert('Registration Successful');
-        this.sendEmailForVerification(res.user);
-        this.router.navigate(['/login']);
-      })
-      .catch((err) => {
-        alert(err.message);
-        this.router.navigate(['/register']);
+  async register(email: string, password: string, role: string): Promise<void> {
+    try {
+      const res = await createUserWithEmailAndPassword(this.auth, email, password);
+      const usersCollection = collection(this.firestore, 'users');
+
+      await addDoc(usersCollection, {
+        uid: res.user.uid,
+        email,
+        role,
       });
+
+      await this.sendEmailForVerification(res.user);
+    } catch (error: any) {
+      throw new Error(`Registration failed: ${error.message}`);
+    }
   }
 
-  logout() {
-    signOut(this.auth)
+  sendEmailForVerification(user: User): void {
+    sendEmailVerification(user)
       .then(() => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('role');
-        localStorage.removeItem('user');
-        this.router.navigate(['/homepage']);
+        alert('Verification email sent!');
+        this.router.navigate(['/verify-email']);
       })
-      .catch((err) => {
-        alert(err.message);
+      .catch(() => {
+        alert('Unable to send verification email.');
       });
   }
 
-  sendEmailForVerification(user: User | null) {
-    if (user) {
-      sendEmailVerification(user)
-        .then(() => {
-          this.router.navigate(['/verify-email']);
-        })
-        .catch(() => {
-          alert('Something went wrong. Unable to send the email.');
-        });
+  async logout(): Promise<void> {
+    try {
+      await signOut(this.auth);
+      this.router.navigate(['/homepage']);
+    } catch (error: any) {
+      alert(`Logout failed: ${error.message}`);
     }
   }
 }
