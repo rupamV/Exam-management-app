@@ -1,5 +1,5 @@
 <div class="test-container">
-  <h2>Welcome, <span class="user-name">{{ currentUser?.name }}</span>!</h2>
+  <h2>Welcome to the Student Dashboard!</h2>
   <p class="instructions">Take your test:</p>
   <div class="exam-card" *ngFor="let exam of exams">
     <h3 class="exam-title">{{ exam.title }}</h3>
@@ -20,6 +20,5 @@
     <button class="submit-btn" (click)="submitAnswer(exam)">Submit</button>
   </div>
 </div>
-<button (click)="logout()">
-  Logout
-</button>
+
+<button (click)="logout()">Logout</button>

@@ -7,19 +7,22 @@ import { UserService } from '../services/user.service';
   standalone: true,
   imports: [],
   templateUrl: './homepage.component.html',
-  styleUrl: './homepage.component.css'
+  styleUrl: './homepage.component.css',
 })
 export class HomepageComponent {
-  errorMessage: string = '';
+  errorMessage = '';
 
-  constructor( private router: Router, private userService: UserService) { }
- 
-    email = '';
-    password = '';
-    login(){
-        this.router.navigate(['login']);
-    }
-    loginStudent() {
-      this.router.navigate(['loginstudent']);
-    }
+  constructor(
+    private router: Router,
+    private userService: UserService,
+  ) {}
+
+  email = '';
+  password = '';
+  login() {
+    this.router.navigate(['login']);
+  }
+  loginStudent() {
+    this.router.navigate(['login']);
+  }
 }
