@@ -30,13 +30,7 @@
     <form (ngSubmit)="addExam()" class="add-exam-form">
       <label>
         Title:
-        <input
-          type="text"
-          [(ngModel)]="newExam.title"
-          name="title"
-          class="form-input"
-          required
-        />
+        <input type="text" [(ngModel)]="newExam.title" name="title" class="form-input" required />
       </label>
       <label>
         Question:
@@ -57,7 +51,7 @@
     <table class="responses-table" *ngIf="responses.length > 0">
       <thead>
         <tr>
-          <th>Student Name</th>
+          <th>Student Email</th>
           <th>Exam Title</th>
           <th>Answer</th>
         </tr>
