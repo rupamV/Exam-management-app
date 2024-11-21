@@ -9,43 +9,37 @@ import {
   where,
   getDocs,
 } from '@angular/fire/firestore';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private firestore: Firestore) {}
+  constructor(
+    private firestore: Firestore,
+    private authService: AuthService,
+  ) {}
 
-  // Authenticate user by email and password
-  async authenticateUser(email: string, password: string): Promise<any> {
+  // Retrieve the current user from AuthService
+  getCurrentUser() {
+    return this.authService.getLoggedInUser(); // Use AuthService to fetch the logged-in user
+  }
+
+  // Get the current user's role from Firestore
+  async getCurrentUserRole(): Promise<string | null> {
+    const currentUser = this.getCurrentUser();
+    if (!currentUser || !currentUser.email) return null;
+
     const usersCollection = collection(this.firestore, 'users');
-    const q = query(
-      usersCollection,
-      where('email', '==', email),
-      where('password', '==', password),
-    ); // This could be modified for security if needed
+    const q = query(usersCollection, where('email', '==', currentUser.email));
     const querySnapshot = await getDocs(q);
 
     if (!querySnapshot.empty) {
       const user = querySnapshot.docs[0].data();
-      // Store the user in localStorage after successful authentication
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      return user;
-    } else {
-      throw new Error('Invalid email or password');
+      return user['role'] || null; // Return the role from Firestore
     }
-  }
 
-  // Retrieve the current user from localStorage
-  getCurrentUser() {
-    const currentUser = localStorage.getItem('currentUser');
-    return currentUser ? JSON.parse(currentUser) : null; // Return null if no currentUser is in localStorage
-  }
-
-  // Get the current user's role from localStorage
-  getCurrentUserRole() {
-    const currentUser = this.getCurrentUser();
-    return currentUser ? currentUser.role : null; // Return the role if user exists
+    return null;
   }
 
   // Check if the current user has taken the test
@@ -53,10 +47,9 @@ export class UserService {
     const currentUser = this.getCurrentUser();
     if (!currentUser || !currentUser.email) return false;
 
-    const userDocRef = doc(this.firestore, 'users', currentUser.email); // Use the email to reference user document
+    const userDocRef = doc(this.firestore, 'users', currentUser.email);
     const docSnapshot = await getDoc(userDocRef);
 
-    // Check if the document exists and if the user has the 'testTaken' field set to true
     return docSnapshot.exists() && docSnapshot.data()?.['testTaken'] === true;
   }
 
@@ -65,7 +58,6 @@ export class UserService {
     const currentUser = this.getCurrentUser();
     if (currentUser && currentUser.email) {
       const userDocRef = doc(this.firestore, 'users', currentUser.email);
-      // Update the 'testTaken' field in Firestore
       await setDoc(userDocRef, { testTaken: true }, { merge: true });
     }
   }
