@@ -9,12 +9,16 @@ import {
   query,
   where,
 } from '@angular/fire/firestore';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExamService {
-  constructor(private firestore: Firestore) {}
+  constructor(
+    private firestore: Firestore,
+    private userService: UserService,
+  ) {}
 
   // Get all exams from Firestore
   async getExams() {
@@ -50,11 +54,15 @@ export class ExamService {
 
   // Record a student's response for an exam
   async recordResponse(examTitle: string, answer: string): Promise<boolean> {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    const email = currentUser?.email; // Use email as unique identifier
+    const currentUser = this.userService.getCurrentUser(); // Fetch the logged-in user
 
-    if (!email) {
+    if (!currentUser) {
       throw new Error('No user is logged in.');
+    }
+
+    const email = currentUser.email; // Get the email of the logged-in user
+    if (!email) {
+      throw new Error('Unable to fetch user email.');
     }
 
     const alreadySubmitted = await this.hasSubmittedResponse(email, examTitle);
