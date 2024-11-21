@@ -8,7 +8,7 @@ import {
   signOut,
   UserCredential,
 } from '@angular/fire/auth';
-import { Firestore, collection, addDoc, getDocs, query, where } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -23,12 +23,13 @@ export class AuthService {
 
   async login(email: string, password: string): Promise<User> {
     try {
-      const res: UserCredential = await signInWithEmailAndPassword(this.auth, email, password); // Explicitly typed as UserCredential
+      const res: UserCredential = await signInWithEmailAndPassword(this.auth, email, password);
       return res.user;
     } catch (error: any) {
       throw new Error(`Login failed: ${error.message}`);
     }
   }
+
   async register(email: string, password: string, role: string): Promise<void> {
     try {
       const res = await createUserWithEmailAndPassword(this.auth, email, password);
@@ -64,5 +65,9 @@ export class AuthService {
     } catch (error: any) {
       alert(`Logout failed: ${error.message}`);
     }
+  }
+
+  getLoggedInUser(): User | null {
+    return this.auth.currentUser; 
   }
 }
